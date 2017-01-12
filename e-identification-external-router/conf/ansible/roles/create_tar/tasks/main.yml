@@ -1,0 +1,45 @@
+---
+- name: Create necessary directories
+  file: path={{item}} state=directory mode=0755
+  with_items:
+    - "{{ tempdir }}/filled"
+    - "{{ tempdir }}/filled/nginx"
+    - "{{ tempdir }}/filled/html"
+    - "{{ tempdir }}/filled/nginx_cache"
+
+#local/dev/test only
+- name: Copy public ssl cert and key
+  copy: src={{ confdir }}/ssl/{{ pub_ssl_cert }} dest={{ tempdir }}/filled/ssl/
+  when: env == "local" or env == "dev" or env == "test"
+
+#local/dev/test only
+- name: Copy public ssl cert and key
+  copy: src={{ confdir }}/ssl/{{ pub_ssl_key }} dest={{ tempdir }}/filled/ssl/
+  when: env == "local" or env == "dev" or env == "test"
+
+#local/dev/test only
+- name: Set private key file permissions
+  file: path={{ tempdir }}/filled/ssl/{{ pub_ssl_key }} owner=root group=root mode=0600
+  when: env == "local" or env == "dev" or env == "test"
+
+#local/dev/test only
+- name: Copy ca certificate
+  copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
+  when: env == "local" or env == "dev" or env == "test"
+
+#local/dev/test only
+- name: Copy diffie-hellmann params
+  copy: src={{ conf_root }}/certs/static/dhparam.pem dest={{ tempdir }}/filled/ssl/
+  when: env == "local" or env == "dev" or env == "test"
+
+- name: Copy robots.txt
+  local_action: copy src={{ confdir }}/robots.txt dest={{ tempdir }}/filled/html/robots.txt
+
+- name: Template nginx conf
+  template: src={{ confdir }}/nginx-ext.conf.template dest={{ tempdir }}/filled/nginx/nginx-ext.conf
+  delegate_to: localhost
+
+- name: Create filled template tar
+  local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .
+  delegate_to: localhost
+
