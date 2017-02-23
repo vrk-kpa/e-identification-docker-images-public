@@ -1,0 +1,39 @@
+---
+- name: Create necessary directories
+  file: path={{item}} state=directory mode=0755
+  with_items:
+    - "{{ tempdir }}/filled"
+    - "{{ tempdir }}/filled/apache"
+    - "{{ tempdir }}/filled/apache/conf"
+
+#dev/test only
+- name: Copy ssl configs
+  copy: src={{ conf_root }}/certs/{{ hst_router_directory }}/ dest={{ tempdir }}/filled/ssl/
+  when: env == "local" or env == "dev" or env == "test"
+
+#dev/test only
+- name: Copy ca certificate
+  copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
+  when: env == "local" or env == "dev" or env == "test"
+
+#dev/test only
+- name: Set private key file permissions
+  file: path={{ tempdir }}/filled/ssl/{{ hst_router_pub_ssl_key }} owner=root group=root mode=0600
+  when: env == "local" or env == "dev" or env == "test"
+
+- name: Create html dir
+  file: path={{ tempdir }}/filled/html state=directory
+
+- name: Create certhcheck file
+  file: path={{ tempdir }}/filled/certcheck state=touch
+
+- name: Template apache conf
+  template: src={{ confdir }}/apache-hst.conf.template dest={{ tempdir }}/filled/apache/conf/apache-hst.conf
+
+- name: Template httpd conf
+  template: src={{ confdir }}/httpd.conf.template dest={{ tempdir }}/filled/apache/conf/httpd.conf
+
+- name: Create filled template tar
+  local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .
+  delegate_to: localhost
+

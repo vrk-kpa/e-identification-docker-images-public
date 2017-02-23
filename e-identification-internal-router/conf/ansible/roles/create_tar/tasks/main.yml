@@ -1,0 +1,27 @@
+- name: Create necessary directories
+  file: path={{item}} state=directory mode=0755
+  with_items:
+    - "{{ tempdir }}/filled"
+    - "{{ tempdir }}/filled/ssl"
+    - "{{ tempdir }}/filled/nginx"
+
+- name: Copy ssl certificate
+  copy: src={{ conf_root }}/certs/{{ host }}/{{ apro_ssl_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ssl_cert }}
+
+- name: Copy ssl key
+  copy: src={{ conf_root }}/certs/{{ host }}/{{ apro_ssl_key }} dest={{ tempdir }}/filled/ssl/{{ apro_ssl_key }}
+
+- name: Copy ca certificate
+  copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
+
+- name: Copy diffie-hellmann params
+  copy: src={{ conf_root }}/certs/static/dhparam.pem dest={{ tempdir }}/filled/ssl/
+
+- name: Template nginx conf
+  template: src={{ confdir }}/nginx-int.conf.template dest={{ tempdir }}/filled/nginx/nginx-int.conf
+  delegate_to: localhost
+
+- name: Create filled template tar
+  local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .
+  delegate_to: localhost
+
