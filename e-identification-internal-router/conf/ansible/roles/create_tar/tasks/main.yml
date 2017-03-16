@@ -18,7 +18,7 @@
   copy: src={{ conf_root }}/certs/static/dhparam.pem dest={{ tempdir }}/filled/ssl/
 
 - name: Template nginx conf
-  template: src={{ confdir }}/nginx-int.conf.template dest={{ tempdir }}/filled/nginx/nginx-int.conf
+  template: src={{ tempdir }}/nginx-int.conf.template dest={{ tempdir }}/filled/nginx/nginx-int.conf
   delegate_to: localhost
 
 - name: Create filled template tar

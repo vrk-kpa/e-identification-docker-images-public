@@ -1,0 +1,75 @@
+server {
+  listen      8001 default_server;
+  location / {
+    proxy_pass       https://{{ vtj_host }}:{{ vtj_port }};
+    proxy_set_header Host {{ vtj_host }}:{{ vtj_port }};
+  }
+}
+
+server {
+  listen      8002 default_server;
+  location / {
+    proxy_pass       https://{{ vtj_host2 }}:{{ vtj_port2 }};
+    proxy_set_header Host {{ vtj_host2 }}:{{ vtj_port2 }};
+  }
+}
+
+upstream vtjload {
+    server 127.0.0.1:8001 max_fails=0 fail_timeout=0;
+    server 127.0.0.1:8002 max_fails=0 fail_timeout=0;
+}
+
+server {
+    server_name {{ int_router_host }};
+    listen 443;
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/{{ apro_ssl_cert }};
+    ssl_certificate_key /etc/nginx/ssl/{{ apro_ssl_key }};
+    proxy_ssl_trusted_certificate /etc/nginx/ssl/{{ apro_ca_cert }};
+    proxy_ssl_verify on;
+    #proxy_ssl_verify off;
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers '{{ nginx_ciphers }}';
+    proxy_ssl_ciphers '{{ nginx_ciphers }}';
+    ssl_prefer_server_ciphers on;
+    server_tokens off;
+    ssl_verify_client off;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+    ssl_session_cache shared:SSL:200m;
+    keepalive_timeout 5;
+    proxy_ssl_session_reuse on;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Frame-Options DENY;
+    add_header Cache-Control "no-store";
+    add_header Pragma "no-cache";
+
+    location /proxy {
+        proxy_pass https://{{ proxy_host }}:{{ proxy_port }}/proxy;
+    }
+    location /shibboleth_idp {
+        proxy_pass https://{{ idp_host }}:{{ idp_port }}/;
+    }
+    location /shibboleth_sp {
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/;
+    }
+    location /metadata {
+        proxy_pass https://{{ metadata_host }}:{{ metadata_port }}/metadata;
+    }
+    location /static {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/;
+        proxy_set_header Host $host;
+    }
+    location /adapter {
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
+    }
+    location /vtj {
+        proxy_next_upstream error timeout invalid_header http_500;
+        proxy_pass http://vtjload/vtj;
+    }
+    location /localisation {
+        proxy_pass https://{{ localisation_host }}:{{ localisation_port }}/localisation;
+    }
+}
+
