@@ -71,5 +71,8 @@ server {
     location /localisation {
         proxy_pass https://{{ localisation_host }}:{{ localisation_port }}/localisation;
     }
+    location /vartti {
+        proxy_pass https://{{ vartti_host }}:{{ vartti_port }}/vartti;
+    }
 }
 
