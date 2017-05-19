@@ -1,0 +1,266 @@
+server {
+  listen      8001 default_server;
+  location / {
+    proxy_pass       https://{{ metadata_host }}:{{ metadata_port }};
+    proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
+  }
+}
+
+upstream  metadata_host {
+    server 127.0.0.1:8001;
+}
+
+  proxy_cache_path /nginx_cache keys_zone=cache:10m max_size=1g inactive=24h;
+  proxy_cache_key $scheme$request_method$host$request_uri;
+
+include conf.d/log_format_configs.config;
+
+server {
+    server_name {{ ext_router_host }};
+    listen 443;
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/{{ pub_ssl_cert }};
+    ssl_certificate_key /etc/nginx/ssl/{{ pub_ssl_key }};
+    proxy_ssl_trusted_certificate /etc/nginx/ssl/{{ apro_ca_cert }};
+    proxy_ssl_verify on;
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers '{{ nginx_ciphers }}';
+    proxy_ssl_ciphers '{{ nginx_ciphers }}';
+    ssl_prefer_server_ciphers on;
+    server_tokens off;
+    ssl_verify_client off;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+    ssl_session_cache shared:SSL:200m;
+    keepalive_timeout 30s;
+    proxy_ssl_session_reuse on;
+    client_body_buffer_size 32k;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Frame-Options DENY;
+
+    # Error handling
+    proxy_intercept_errors on;
+    error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 426 428 429 431 =404 @err404;
+    error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
+
+    location /favicon.ico {
+	empty_gif;
+    }
+
+    location = / {
+        return 301 https://{{ ext_router_host }}/sivut/info/tietoapalvelusta/;
+    }
+
+    location @err404 {
+	if ($request_uri ~ /healtcheck.html) {
+	    return 404;
+      	}
+	if ($request_uri ~ /smoketest.html) {
+	    return 404;
+      	}
+	rewrite ^/(.*) /sivut/404/ break;
+        proxy_pass https://{{ static_host }}:{{ static_port }};
+    }
+
+    location @err500 {
+        rewrite ^/(.*) /sivut/500/ break;
+        proxy_pass https://{{ static_host }}:{{ static_port }};
+    }
+
+    # cache
+    proxy_cache off;
+    proxy_cache_valid 200 302 10m;
+    proxy_cache_valid 301      1h;
+    proxy_cache_valid any      1m;
+    proxy_buffers 8            16k;
+
+
+    # Redirects to Static Content
+    location /static {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/;
+        proxy_set_header Host $host;
+    }
+
+    # most /static/localisation: nginx cache valid for 1h, browser obeys static
+    location /static/localisation {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/localisation;
+        proxy_set_header Host $host;
+        proxy_ignore_headers Cache-Control Expires;
+        proxy_cache_valid 200 1h;
+        proxy_cache cache;
+    }
+
+    location /sivut/ {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/;
+        proxy_set_header Host $host;
+        proxy_cache_key $scheme$request_method$host$uri;
+        proxy_cache cache;
+    }
+    location /404 {
+        rewrite ^.* /sivut/404/ permanent;
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/404/;
+        proxy_set_header Host $host;
+    }
+    location /500 {
+        rewrite ^.* /sivut/500/ permanent;
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/500/;
+        proxy_set_header Host $host;
+    }
+    location /discovery-page {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/discovery-page/;
+        proxy_set_header Host $host;
+    }
+    location /timeout {
+        rewrite ^/timeout?(.*) /sivut/timeout/?$1 permanent;
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/timeout/;
+        proxy_set_header Host $host;
+    }
+    location /disruption {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ static_host }}:{{ static_port }}/resources/js/disruption_data/;
+        proxy_set_header Host $host;
+        proxy_ignore_headers Cache-Control Expires;
+        proxy_cache_valid 200 1m;
+        proxy_cache cache;
+    }
+    # most /resources: nginx cache valid for 1h, browser obeys static
+    location /resources {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/resources;
+        proxy_set_header Host $host;
+        proxy_ignore_headers Cache-Control Expires;
+        proxy_cache_valid 200 1h;
+        proxy_cache cache;
+    }
+    # only app.js has shorter cache
+    location = /resources/js/app.js {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/resources/js/app.js;
+        proxy_set_header Host $host;
+        proxy_ignore_headers Cache-Control Expires;
+        proxy_cache_valid 200 10m;
+        proxy_cache cache;
+    }
+
+    # setting language cookie based on locale request parameter
+    location /idp/profile/SAML2/Redirect/SSO {
+      set $issamlrequest 0;
+      if ($args ~ "^SAMLRequest=.*&locale=(.*)") {
+        set $issamlrequest 1;
+        set $requestlocale $1;
+      }
+      if ($issamlrequest = "1") {
+	add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/idp/;secure";
+      }
+      add_header Cache-Control "no-store";
+      add_header X-Frame-Options SAMEORIGIN;
+      proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile/SAML2/Redirect/SSO;
+      proxy_set_header Host $host;
+    }
+
+    # Redirects to Identity Provider
+    location /idp/profile {
+        add_header Cache-Control "no-store";
+        add_header X-Frame-Options SAMEORIGIN;
+        proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile;
+        proxy_set_header Host $host;
+    }
+    location /idp/authn {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/authn;
+        proxy_set_header Host $host;
+    }
+
+    # Redirects to Service Provider
+    location /sp-secured {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-secured;
+    }
+    location /sp-error {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-error;
+    }
+    location /Shibboleth.sso {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
+    }
+
+    # Redirects to Integration Identity Provider
+    location /tupasidp/profile {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/profile;
+        proxy_set_header Host $host;
+    }
+    location /tupasidp/authn {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/authn;
+        proxy_set_header Host $host;
+    }
+    location /adapter {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
+    }
+
+        # Redirects to Mobile Identity Provider
+
+    location /mobileidp/profile {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/profile;
+        proxy_set_header Host $host;
+    }
+    location /mobileidp/authn {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/authn;
+        proxy_set_header Host $host;
+    }
+     location /mobileidp/stylesheets {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/stylesheets;
+        proxy_set_header Host $host;
+    }
+     location /mobileidp/js {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/js;
+        proxy_set_header Host $host;
+    }
+     location /mobileidp/img {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/img;
+        proxy_set_header Host $host;
+    }
+     location /mobileidp/font {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/font;
+        proxy_set_header Host $host;
+    }
+
+    # Redirects to feedback service
+    location /feedback {
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ feedback_host }}:{{ feedback_port }}/;
+    }
+
+    # Redirects to public api endpoints
+
+    # Public metadata API
+    # Only fetch by entityID is allowed, a named upstream definition is used
+    # to make nginx use default resolver
+    location /api/metadata {
+      # Define errors here since otherwise they are passed through from this location
+      error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 426 428 429 431 =404 @err404;
+      error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
+      proxy_cache_use_stale   error timeout updating;
+      proxy_cache_valid 200 5m;
+      proxy_cache cache;
+      proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
+      if ($request_uri ~* /api/metadata/add(.*)) {
+        break;
+      }
+      if ($request_uri ~ /api/metadata/(.+)) {
+        proxy_pass http://metadata_host/metadata/rest/metadata/$1;
+        break;
+      }
+      error_page 404 =404 @err404;
+    }
+    include conf.d/per_env_configs.config;
+}

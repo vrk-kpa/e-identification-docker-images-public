@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:1.11.0
 
 
 RUN apt-get update && apt-get install --only-upgrade libssl1.0.0 openssl
