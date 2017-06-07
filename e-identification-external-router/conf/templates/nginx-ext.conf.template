@@ -196,6 +196,10 @@ server {
         proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/authn;
         proxy_set_header Host $host;
     }
+    # block attrs
+    location /adapter/rest/adapter/attrs {
+        return 404;
+    }
     location /adapter {
         add_header Cache-Control "no-store";
         proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
