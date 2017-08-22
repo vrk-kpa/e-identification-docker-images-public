@@ -4,8 +4,12 @@
   with_items:
     - "{{ tempdir }}/filled"
     - "{{ tempdir }}/filled/nginx"
-    - "{{ tempdir }}/filled/html"
     - "{{ tempdir }}/filled/nginx_cache"
+
+- name: Create necessary directories
+  file: path={{item}} state=directory
+  with_items:
+    - "{{ tempdir }}/filled/html"
 
 #local/dev/test only
 - name: Copy public ssl cert and key

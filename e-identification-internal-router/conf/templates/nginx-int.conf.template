@@ -65,7 +65,7 @@ server {
         proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
     }
     location /vtj {
-        proxy_next_upstream error timeout invalid_header http_500;
+        proxy_next_upstream error timeout invalid_header http_500 non_idempotent;
         proxy_pass http://vtjload/vtj;
     }
     location /localisation {

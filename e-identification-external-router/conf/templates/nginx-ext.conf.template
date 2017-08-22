@@ -75,6 +75,13 @@ server {
     proxy_cache_valid any      1m;
     proxy_buffers 8            16k;
 
+    # Block access to service-sp-metadata.xml from external networks
+    location /static/metadata/service-sp-metadata.xml {
+        {{ ext_router_sp_metadata_config | default('allow 127.0.0.1;') }}
+        deny all;
+        proxy_pass https://{{ static_host }}:{{ static_port }}/metadata/service-sp-metadata.xml;
+        proxy_set_header Host $host;
+    }
 
     # Redirects to Static Content
     location /static {
@@ -184,16 +191,18 @@ server {
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
     }
+    location /Shibboleth.sso/Logout {
+    }
 
     # Redirects to Integration Identity Provider
-    location /tupasidp/profile {
+    location /tupasidp/profile/SAML2 {
         add_header Cache-Control "no-store";
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/profile;
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/profile/SAML2;
         proxy_set_header Host $host;
     }
-    location /tupasidp/authn {
+    location /tupasidp/authn/External {
         add_header Cache-Control "no-store";
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/authn;
+        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/authn/External;
         proxy_set_header Host $host;
     }
     # block attrs
@@ -205,36 +214,10 @@ server {
         proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
     }
 
-        # Redirects to Mobile Identity Provider
-
-    location /mobileidp/profile {
+    # Redirects to Mobile Identity Provider
+    location /mobileidp/profile/SAML2 {
         add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/profile;
-        proxy_set_header Host $host;
-    }
-    location /mobileidp/authn {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/authn;
-        proxy_set_header Host $host;
-    }
-     location /mobileidp/stylesheets {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/stylesheets;
-        proxy_set_header Host $host;
-    }
-     location /mobileidp/js {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/js;
-        proxy_set_header Host $host;
-    }
-     location /mobileidp/img {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/img;
-        proxy_set_header Host $host;
-    }
-     location /mobileidp/font {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/font;
+        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/profile/SAML2;
         proxy_set_header Host $host;
     }
 

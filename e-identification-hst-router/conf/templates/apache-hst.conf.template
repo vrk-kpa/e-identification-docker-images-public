@@ -93,8 +93,8 @@ ServerTokens Minimal
   ProxyPass /hstidp https://{{ hst_idp_host }}:{{ hst_idp_port }}/hstidp
   ProxyPassReverse /hstidp https://{{ hst_idp_host }}:{{ hst_idp_port }}/hstidp
 
-  ProxyPass /static https://{{ static_host }}:{{ static_port }}/
-  ProxyPassReverse /static https://{{ static_host }}:{{ static_port }}/
+  ProxyPass /static/localisation https://{{ static_host }}:{{ static_port }}/localisation/
+  ProxyPassReverse /static/localisation https://{{ static_host }}:{{ static_port }}/localisation/
 
   ProxyPass /resources https://{{ static_host }}:{{ static_port }}/resources/
   ProxyPassReverse /resources https://{{ static_host }}:{{ static_port }}/resources/
