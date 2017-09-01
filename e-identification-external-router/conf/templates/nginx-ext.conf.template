@@ -194,24 +194,16 @@ server {
     location /Shibboleth.sso/Logout {
     }
 
-    # Redirects to Integration Identity Provider
+    # Redirects to TUPAS Identity Provider
     location /tupasidp/profile/SAML2 {
         add_header Cache-Control "no-store";
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/profile/SAML2;
+        proxy_pass https://{{ tupas_idp_host }}:{{ tupas_idp_port }}/tupasidp/profile/SAML2;
         proxy_set_header Host $host;
     }
     location /tupasidp/authn/External {
         add_header Cache-Control "no-store";
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/tupasidp/authn/External;
+        proxy_pass https://{{ tupas_idp_host }}:{{ tupas_idp_port }}/tupasidp/authn/External;
         proxy_set_header Host $host;
-    }
-    # block attrs
-    location /adapter/rest/adapter/attrs {
-        return 404;
-    }
-    location /adapter {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
     }
 
     # Redirects to Mobile Identity Provider

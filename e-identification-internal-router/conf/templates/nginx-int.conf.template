@@ -1,5 +1,11 @@
+log_format vtj_log '$remote_addr - $remote_user [$time_local] '
+                   '"$request" $status $body_bytes_sent '
+                   '"$http_referer" "$http_user_agent" "$server_name"';
+
 server {
   listen      8001 default_server;
+  server_name {{ vtj_container_name }};
+  access_log /var/log/nginx/access.log vtj_log;
   location / {
     proxy_pass       https://{{ vtj_host }}:{{ vtj_port }};
     proxy_set_header Host {{ vtj_host }}:{{ vtj_port }};
@@ -8,6 +14,8 @@ server {
 
 server {
   listen      8002 default_server;
+  server_name {{ vtj_container_name2 }};
+  access_log /var/log/nginx/access.log vtj_log;
   location / {
     proxy_pass       https://{{ vtj_host2 }}:{{ vtj_port2 }};
     proxy_set_header Host {{ vtj_host2 }}:{{ vtj_port2 }};
@@ -61,11 +69,8 @@ server {
         proxy_pass https://{{ static_host }}:{{ static_port }}/;
         proxy_set_header Host $host;
     }
-    location /adapter {
-        proxy_pass https://{{ integration_idp_host }}:{{ integration_idp_port }}/adapter;
-    }
     location /vtj {
-        proxy_next_upstream error timeout invalid_header http_500 non_idempotent;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 non_idempotent;
         proxy_pass http://vtjload/vtj;
     }
     location /localisation {
