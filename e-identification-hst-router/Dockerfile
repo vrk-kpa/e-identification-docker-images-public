@@ -1,4 +1,4 @@
-FROM httpd:2.4
+FROM httpd:2.4.27
 
 
 COPY conf/templates /data00/templates/store
