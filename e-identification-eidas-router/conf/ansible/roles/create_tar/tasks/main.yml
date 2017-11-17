@@ -1,0 +1,32 @@
+---
+- name: Create necessary directories
+  file: path={{item}} state=directory mode=0755
+  with_items:
+    - "{{ tempdir }}/filled"
+    - "{{ tempdir }}/filled/apache"
+    - "{{ tempdir }}/filled/apache/conf"
+
+- name: Copy ssl configs
+  copy: src={{ conf_root }}/certs/{{ eidas_router_host }}/ dest={{ tempdir }}/filled/ssl/
+  when: env == "local"
+
+- name: Copy ca certificate
+  copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
+  when: env == "local"
+
+- name: Set private key file permissions
+  file: path={{ tempdir }}/filled/ssl/{{ apro_ssl_key }} owner=root group=root mode=0600
+  when: env == "local"
+
+- name: Create html dir
+  file: path={{ tempdir }}/filled/html state=directory
+
+- name: Template apache conf
+  template: src={{ tempdir }}/apache-site.conf.template dest={{ tempdir }}/filled/apache/conf/apache-site.conf
+
+- name: Template httpd conf
+  template: src={{ tempdir }}/httpd.conf.template dest={{ tempdir }}/filled/apache/conf/httpd.conf
+
+- name: Create filled template tar
+  local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .
+  delegate_to: localhost

@@ -1,0 +1,71 @@
+Listen {{ eidas_router_target_port }}
+ServerTokens Minimal
+
+<VirtualHost *:{{ eidas_router_target_port }}>
+  DocumentRoot "/html"
+  ServerName {{ eidas_router_host }}
+  SSLEngine On
+  SSLProxyEngine On
+  SSLCertificateFile    /etc/apache/ssl/{{ eidas_router_pub_ssl_cert }}
+  SSLCertificateKeyFile /etc/apache/ssl/{{ eidas_router_pub_ssl_key }}
+  SSLProxyCACertificateFile /etc/apache/ssl/{{ apro_ca_cert }}
+  SSLProxyVerify require
+  SSLProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
+  SSLProxyProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
+  SSLCipherSuite {{ apache_ciphers }}
+  SSLProxyCipherSuite {{ apache_ciphers }}
+  SSLHonorCipherOrder on
+  SSLCompression Off
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains; preload"
+  SSLVerifyClient none
+  ProxyPreserveHost On
+  SSLProxyCheckPeerCN off
+  SSLProxyCheckPeerName off
+  TraceEnable off
+  Header set X-Content-Type-Options: nosniff
+  Header set X-XSS-Protection: "1; mode=block"
+  Header set X-Frame-Options: deny
+  Header set Cache-Control "no-store"
+  Header set Pragma "no-cache"
+
+  ErrorDocument 400 https://{{ ext_router_host }}/404
+  ErrorDocument 401 https://{{ ext_router_host }}/404
+  ErrorDocument 402 https://{{ ext_router_host }}/404
+  ErrorDocument 403 https://{{ ext_router_host }}/404
+  ErrorDocument 404 https://{{ ext_router_host }}/404
+  ErrorDocument 405 https://{{ ext_router_host }}/404
+  ErrorDocument 406 https://{{ ext_router_host }}/404
+  ErrorDocument 407 https://{{ ext_router_host }}/404
+  ErrorDocument 408 https://{{ ext_router_host }}/404
+  ErrorDocument 409 https://{{ ext_router_host }}/404
+  ErrorDocument 410 https://{{ ext_router_host }}/404
+  ErrorDocument 411 https://{{ ext_router_host }}/404
+  ErrorDocument 412 https://{{ ext_router_host }}/404
+  ErrorDocument 413 https://{{ ext_router_host }}/404
+  ErrorDocument 414 https://{{ ext_router_host }}/404
+  ErrorDocument 415 https://{{ ext_router_host }}/404
+  ErrorDocument 416 https://{{ ext_router_host }}/404
+  ErrorDocument 417 https://{{ ext_router_host }}/404
+  ErrorDocument 421 https://{{ ext_router_host }}/404
+  ErrorDocument 426 https://{{ ext_router_host }}/404
+  ErrorDocument 428 https://{{ ext_router_host }}/404
+  ErrorDocument 429 https://{{ ext_router_host }}/404
+  ErrorDocument 431 https://{{ ext_router_host }}/404
+  ErrorDocument 500 https://{{ ext_router_host }}/500
+  ErrorDocument 501 https://{{ ext_router_host }}/500
+  ErrorDocument 502 https://{{ ext_router_host }}/500
+  ErrorDocument 503 https://{{ ext_router_host }}/500
+  ErrorDocument 504 https://{{ ext_router_host }}/500
+  ErrorDocument 505 https://{{ ext_router_host }}/500
+  ErrorDocument 506 https://{{ ext_router_host }}/500
+  ErrorDocument 507 https://{{ ext_router_host }}/500
+  ErrorDocument 511 https://{{ ext_router_host }}/500
+
+  <Directory /html/>
+    Require all granted
+  </Directory>
+
+  ProxyPass /EidasNode http://{{ eidas_host }}:{{ eidas_port }}/EidasNode/
+  ProxyPassReverse /EidasNode http://{{ eidas_host }}:{{ eidas_port }}/EidasNode/
+
+</VirtualHost>

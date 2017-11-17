@@ -38,6 +38,7 @@ server {
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Frame-Options DENY;
+    add_header Content-Security-Policy "{{ content_security_policy }}" always;
 
     # Error handling
     proxy_intercept_errors on;
@@ -115,6 +116,7 @@ server {
         proxy_set_header Host $host;
     }
     location /discovery-page {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/discovery-page/;
         proxy_set_header Host $host;
@@ -125,6 +127,7 @@ server {
         proxy_set_header Host $host;
     }
     location /disruption {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ static_host }}:{{ static_port }}/resources/js/disruption_data/;
         proxy_set_header Host $host;
@@ -159,6 +162,7 @@ server {
       if ($issamlrequest = "1") {
 	add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/idp/;secure";
       }
+      add_header Content-Security-Policy "{{ content_security_policy }}" always;
       add_header Cache-Control "no-store";
       add_header X-Frame-Options SAMEORIGIN;
       proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile/SAML2/Redirect/SSO;
@@ -167,12 +171,14 @@ server {
 
     # Redirects to Identity Provider
     location /idp/profile {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         add_header X-Frame-Options SAMEORIGIN;
         proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile;
         proxy_set_header Host $host;
     }
     location /idp/authn {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/authn;
         proxy_set_header Host $host;
@@ -180,14 +186,17 @@ server {
 
     # Redirects to Service Provider
     location /sp-secured {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-secured;
     }
     location /sp-error {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-error;
     }
     location /Shibboleth.sso {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
     }
@@ -196,12 +205,15 @@ server {
 
     # Redirects to TUPAS Identity Provider
     location /tupasidp/profile/SAML2 {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ tupas_idp_host }}:{{ tupas_idp_port }}/tupasidp/profile/SAML2;
         proxy_set_header Host $host;
     }
+
     location /tupasidp/authn/External {
         add_header Cache-Control "no-store";
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         proxy_pass https://{{ tupas_idp_host }}:{{ tupas_idp_port }}/tupasidp/authn/External;
         proxy_set_header Host $host;
     }
@@ -215,6 +227,7 @@ server {
 
     # Redirects to feedback service
     location /feedback {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ feedback_host }}:{{ feedback_port }}/;
     }
