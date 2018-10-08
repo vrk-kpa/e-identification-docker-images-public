@@ -60,7 +60,7 @@ done
 docker pull httpd:2.4.27
 
 #build
-IMAGE_NAME=dev-docker-registry.kapa.ware.fi/${PROJECTNAME}:${TARGET_ENV}
+IMAGE_NAME=e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/${PROJECTNAME}:${TARGET_ENV}
 
 #build, tag and push docker image
 

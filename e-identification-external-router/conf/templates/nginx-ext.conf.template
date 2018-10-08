@@ -1,17 +1,17 @@
 server {
-  listen      8001 default_server;
-  location / {
-    proxy_pass       https://{{ metadata_host }}:{{ metadata_port }};
-    proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
-  }
+    listen      8001 default_server;
+    location / {
+        proxy_pass       https://{{ metadata_host }}:{{ metadata_port }};
+        proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
+    }
 }
 
 upstream  metadata_host {
     server 127.0.0.1:8001;
 }
 
-  proxy_cache_path /nginx_cache keys_zone=cache:10m max_size=1g inactive=24h;
-  proxy_cache_key $scheme$request_method$host$request_uri;
+proxy_cache_path /nginx_cache keys_zone=cache:10m max_size=1g inactive=24h;
+proxy_cache_key $scheme$request_method$host$request_uri;
 
 include conf.d/log_format_configs.config;
 
@@ -46,7 +46,7 @@ server {
     error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
 
     location /favicon.ico {
-	empty_gif;
+        empty_gif;
     }
 
     location = / {
@@ -54,13 +54,13 @@ server {
     }
 
     location @err404 {
-	if ($request_uri ~ /healtcheck.html) {
-	    return 404;
-      	}
-	if ($request_uri ~ /smoketest.html) {
-	    return 404;
-      	}
-	rewrite ^/(.*) /sivut/404/ break;
+        if ($request_uri ~ /healtcheck.html) {
+            return 404;
+        }
+        if ($request_uri ~ /smoketest.html) {
+            return 404;
+        }
+        rewrite ^/(.*) /sivut/404/ break;
         proxy_pass https://{{ static_host }}:{{ static_port }};
     }
 
@@ -126,10 +126,23 @@ server {
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/timeout/;
         proxy_set_header Host $host;
     }
+    location /sivut/cookie {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/cookie/;
+        proxy_set_header Host $host;
+    }
     location /disruption {
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ static_host }}:{{ static_port }}/resources/js/disruption_data/;
+        proxy_set_header Host $host;
+        proxy_ignore_headers Cache-Control Expires;
+        proxy_cache_valid 200 1m;
+        proxy_cache cache;
+    }
+
+    # no cache for config.js
+    location = /resources/js/config.js {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/resources/js/config.js;
         proxy_set_header Host $host;
         proxy_ignore_headers Cache-Control Expires;
         proxy_cache_valid 200 1m;
@@ -154,19 +167,52 @@ server {
 
     # setting language cookie based on locale request parameter
     location /idp/profile/SAML2/Redirect/SSO {
-      set $issamlrequest 0;
-      if ($args ~ "^SAMLRequest=.*&locale=(.*)") {
-        set $issamlrequest 1;
-        set $requestlocale $1;
-      }
-      if ($issamlrequest = "1") {
-	add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/idp/;secure";
-      }
-      add_header Content-Security-Policy "{{ content_security_policy }}" always;
-      add_header Cache-Control "no-store";
-      add_header X-Frame-Options SAMEORIGIN;
-      proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile/SAML2/Redirect/SSO;
-      proxy_set_header Host $host;
+        set $issamlrequest 0;
+        if ($args ~ "^SAMLRequest=.*&locale=(.*)") {
+            set $issamlrequest 1;
+            set $requestlocale $1;
+        }
+
+        set $cookiestatus "0";
+        if ($args ~ "^execution=.*") {
+            set $cookiestatus "1";
+        }
+        if ($cookie_JSESSIONID = "") {
+            set $cookiestatus "${cookiestatus}1";
+        }
+        if ($cookiestatus = "11") {
+            # not initial saml request and cookies are disabled, redirect to error
+            return 302 https://{{ ext_router_host }}/sivut/cookie/;
+        }
+
+        if ($issamlrequest = "1") {
+            add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/idp/;secure";
+        }
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
+        add_header Cache-Control "no-store";
+        add_header X-Frame-Options SAMEORIGIN;
+        proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile/SAML2/Redirect/SSO;
+        proxy_set_header Host $host;
+    }
+
+    location /idp/profile/SAML2/POST/SSO {
+
+        set $cookiestatus "0";
+        if ($args ~ "^execution=.*") {
+            set $cookiestatus "1";
+        }
+        if ($cookie_JSESSIONID = "") {
+            set $cookiestatus "${cookiestatus}1";
+        }
+        if ($cookiestatus = "11") {
+            # not initial saml request and cookies are disabled, redirect to error
+            return 302 https://{{ ext_router_host }}/sivut/cookie/;
+        }
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
+        add_header Cache-Control "no-store";
+        add_header X-Frame-Options SAMEORIGIN;
+        proxy_pass https://{{ idp_host }}:{{ idp_port }}/idp/profile/SAML2/POST/SSO;
+        proxy_set_header Host $host;
     }
 
     # Redirects to Identity Provider
@@ -189,6 +235,11 @@ server {
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-secured;
+    }
+    location /sp/eidas-email {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/eidas-email;
     }
     location /sp-error {
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
@@ -238,21 +289,41 @@ server {
     # Only fetch by entityID is allowed, a named upstream definition is used
     # to make nginx use default resolver
     location /api/metadata {
-      # Define errors here since otherwise they are passed through from this location
-      error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 426 428 429 431 =404 @err404;
-      error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
-      proxy_cache_use_stale   error timeout updating;
-      proxy_cache_valid 200 5m;
-      proxy_cache cache;
-      proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
-      if ($request_uri ~* /api/metadata/add(.*)) {
-        break;
-      }
-      if ($request_uri ~ /api/metadata/(.+)) {
-        proxy_pass http://metadata_host/metadata/rest/metadata/$1;
-        break;
-      }
-      error_page 404 =404 @err404;
+        # Define errors here since otherwise they are passed through from this location
+        limit_except GET {
+            deny  all;
+        }
+        error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 426 428 429 431 =404 @err404;
+        error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
+        proxy_cache_use_stale   error timeout updating;
+        proxy_cache_valid 200 5m;
+        proxy_cache cache;
+        proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
+        if ($request_uri ~* /api/metadata/add(.*)) {
+            break;
+        }
+        if ($request_uri ~ /api/metadata/(.+)) {
+            proxy_pass http://metadata_host/metadata/rest/metadata/$1;
+            break;
+        }
+        error_page 404 =404 @err404;
     }
+
+    # API to fetch eIDAS country data
+    location /api/country {
+        limit_except GET {
+            deny  all;
+        }
+        # Define errors here since otherwise they are passed through from this location
+        error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 426 428 429 431 =404 @err404;
+        error_page 500 501 502 503 504 505 506 507 511 =500 @err500;
+        proxy_cache_use_stale   error timeout updating;
+        proxy_cache_valid 200 5m;
+        proxy_cache cache;
+        proxy_set_header Host {{ metadata_host }}:{{ metadata_port }};
+        proxy_pass http://metadata_host/metadata/rest/country;
+        error_page 404 =404 @err404;
+    }
+
     include conf.d/per_env_configs.config;
 }

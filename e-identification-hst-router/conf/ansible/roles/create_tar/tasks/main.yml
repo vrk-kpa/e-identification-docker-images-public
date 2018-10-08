@@ -16,11 +16,6 @@
   copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
   when: env == "local" or env == "dev" or env == "test"
 
-#dev/test only
-- name: Set private key file permissions
-  file: path={{ tempdir }}/filled/ssl/{{ hst_router_pub_ssl_key }} owner=root group=root mode=0600
-  when: env == "local" or env == "dev" or env == "test"
-
 - name: Create html dir
   file: path={{ tempdir }}/filled/html state=directory
 

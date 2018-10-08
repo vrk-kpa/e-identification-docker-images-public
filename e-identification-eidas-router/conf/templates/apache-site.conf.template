@@ -5,22 +5,19 @@ ServerTokens Minimal
   DocumentRoot "/html"
   ServerName {{ eidas_router_host }}
   SSLEngine On
-  SSLProxyEngine On
   SSLCertificateFile    /etc/apache/ssl/{{ eidas_router_pub_ssl_cert }}
   SSLCertificateKeyFile /etc/apache/ssl/{{ eidas_router_pub_ssl_key }}
-  SSLProxyCACertificateFile /etc/apache/ssl/{{ apro_ca_cert }}
-  SSLProxyVerify require
-  SSLProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
-  SSLProxyProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
+  SSLProtocol -all +TLSv1.2
   SSLCipherSuite {{ apache_ciphers }}
-  SSLProxyCipherSuite {{ apache_ciphers }}
   SSLHonorCipherOrder on
   SSLCompression Off
+  SSLInsecureRenegotiation off
+  SSLOpenSSLConfCmd ECDHParameters Automatic
+  SSLOpenSSLConfCmd Curves brainpoolP512r1:brainpoolP384r1:brainpoolP256r1:secp521r1:secp384r1:prime256v1
+  SSLOpenSSLConfCmd DHParameters /etc/apache/ssl/dhparams.pem
   Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains; preload"
   SSLVerifyClient none
   ProxyPreserveHost On
-  SSLProxyCheckPeerCN off
-  SSLProxyCheckPeerName off
   TraceEnable off
   Header set X-Content-Type-Options: nosniff
   Header set X-XSS-Protection: "1; mode=block"

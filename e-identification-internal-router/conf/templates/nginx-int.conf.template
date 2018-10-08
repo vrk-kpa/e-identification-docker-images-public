@@ -27,6 +27,11 @@ upstream vtjload {
     server 127.0.0.1:8002 max_fails=0 fail_timeout=0;
 }
 
+upstream koulvtjfakevtjload {
+    server 127.0.0.1:8001 max_fails=0 fail_timeout=0;
+    server 127.0.0.1:8002 max_fails=0 fail_timeout=0 backup;
+}
+
 server {
     server_name {{ int_router_host }};
     listen 443;
@@ -73,11 +78,19 @@ server {
         proxy_next_upstream error timeout invalid_header http_500 http_502 non_idempotent;
         proxy_pass http://vtjload/vtj;
     }
+    # KAPA-4583 APRO/test enviroment needs different business logic that production
+    location /koulvtjfakevtj/vtj {
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_404 non_idempotent;
+        proxy_pass http://koulvtjfakevtjload/vtj;
+    }
     location /localisation {
         proxy_pass https://{{ localisation_host }}:{{ localisation_port }}/localisation;
     }
     location /vartti {
         proxy_pass https://{{ vartti_host }}:{{ vartti_port }}/vartti;
+    }
+    location /feedback/eidas {
+        proxy_pass https://{{ feedback_host }}:{{ feedback_port }}/eidas;
     }
 }
 

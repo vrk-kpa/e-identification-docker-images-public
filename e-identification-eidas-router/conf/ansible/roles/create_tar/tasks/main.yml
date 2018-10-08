@@ -14,8 +14,8 @@
   copy: src={{ conf_root }}/certs/{{ apro_ca_cert }} dest={{ tempdir }}/filled/ssl/{{ apro_ca_cert }}
   when: env == "local"
 
-- name: Set private key file permissions
-  file: path={{ tempdir }}/filled/ssl/{{ apro_ssl_key }} owner=root group=root mode=0600
+- name: Copy dhparams
+  copy: src={{ tempdir }}/dhparams.pem dest={{ tempdir }}/filled/ssl/dhparams.pem
   when: env == "local"
 
 - name: Create html dir

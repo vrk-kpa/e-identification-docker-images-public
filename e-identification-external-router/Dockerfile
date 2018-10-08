@@ -1,6 +1,6 @@
-FROM nginx:1.11.0
+FROM nginx:1.11.13
 
-RUN apt-get update && apt-get install --only-upgrade libssl1.0.0 openssl && apt-get -y install logrotate cron
+RUN apt-get update && apt-get upgrade -y && apt-get -y install logrotate cron
 COPY conf/templates /data00/templates/store
 COPY conf/ansible /data00/templates/store/ansible
 COPY conf/etc-logrotate.d/nginx /etc/logrotate.d/nginx
