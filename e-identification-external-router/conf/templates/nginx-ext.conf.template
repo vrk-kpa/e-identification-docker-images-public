@@ -69,6 +69,14 @@ server {
         proxy_pass https://{{ static_host }}:{{ static_port }};
     }
 
+    location @errtupas404 {
+        return 302 https://{{ ext_router_host }}/sivut/404/?t=null&m=tupas404;
+    }
+    
+    location @errtupas502 {
+        return 302 https://{{ ext_router_host }}/sivut/500/?t=null&m=tupas502;
+    }
+
     # cache
     proxy_cache off;
     proxy_cache_valid 200 302 10m;
@@ -168,7 +176,7 @@ server {
     # setting language cookie based on locale request parameter
     location /idp/profile/SAML2/Redirect/SSO {
         set $issamlrequest 0;
-        if ($args ~ "^SAMLRequest=.*&locale=(.*)") {
+        if ($args ~ "^SAMLRequest=.*&locale=(fi|sv|en)$") {
             set $issamlrequest 1;
             set $requestlocale $1;
         }
@@ -186,7 +194,7 @@ server {
         }
 
         if ($issamlrequest = "1") {
-            add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/idp/;secure";
+            add_header Set-Cookie "E-Identification-Lang=$requestlocale;;;Path=/;secure";
         }
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
@@ -267,6 +275,8 @@ server {
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         proxy_pass https://{{ tupas_idp_host }}:{{ tupas_idp_port }}/tupasidp/authn/External;
         proxy_set_header Host $host;
+        error_page 404 =404 @errtupas404;
+        error_page 502 =502 @errtupas502;
     }
 
     # Redirects to Mobile Identity Provider

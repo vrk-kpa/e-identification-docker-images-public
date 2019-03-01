@@ -62,7 +62,7 @@ done
 IMAGE_NAME=e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/${PROJECTNAME}:${TARGET_ENV}
 
 #build, tag and push docker image
-docker pull nginx
+docker pull nginx:1.14.0
 docker build -f Dockerfile -t ${IMAGE_NAME} .
 
 # Add labels to image, jenkins build tag, git commit, git branch, package list and jar list currently

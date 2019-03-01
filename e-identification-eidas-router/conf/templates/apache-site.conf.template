@@ -12,7 +12,6 @@ ServerTokens Minimal
   SSLHonorCipherOrder on
   SSLCompression Off
   SSLInsecureRenegotiation off
-  SSLOpenSSLConfCmd ECDHParameters Automatic
   SSLOpenSSLConfCmd Curves brainpoolP512r1:brainpoolP384r1:brainpoolP256r1:secp521r1:secp384r1:prime256v1
   SSLOpenSSLConfCmd DHParameters /etc/apache/ssl/dhparams.pem
   Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains; preload"

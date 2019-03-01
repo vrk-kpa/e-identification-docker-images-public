@@ -5,6 +5,7 @@
     - "{{ tempdir }}/filled"
     - "{{ tempdir }}/filled/nginx"
     - "{{ tempdir }}/filled/nginx_cache"
+    - "{{ tempdir }}/filled/nginx/conf.d"
 
 - name: Create necessary directories
   file: path={{item}} state=directory
@@ -34,16 +35,20 @@
 - name: Copy robots.txt
   local_action: copy src={{ confdir }}/robots.txt dest={{ tempdir }}/filled/html/robots.txt
 
+- name: Template nginx-ext conf
+  template: src={{ tempdir }}/nginx-ext.conf.template dest={{ tempdir }}/filled/nginx/conf.d/nginx-ext.conf
+  delegate_to: localhost
+
 - name: Template nginx conf
-  template: src={{ tempdir }}/nginx-ext.conf.template dest={{ tempdir }}/filled/nginx/nginx-ext.conf
+  template: src={{ tempdir }}/nginx.conf.template dest={{ tempdir }}/filled/nginx/nginx.conf
   delegate_to: localhost
 
 - name: Template nginx local conf
-  template: src={{ confdir }}/per_env_configs.config.template dest={{ tempdir }}/filled/nginx/per_env_configs.config
+  template: src={{ confdir }}/per_env_configs.config.template dest={{ tempdir }}/filled/nginx/conf.d/per_env_configs.config
   delegate_to: localhost
 
 - name: Copy log_format_configs.conf
-  local_action: copy src={{ confdir }}/log_format_configs.config dest={{ tempdir }}/filled/nginx/log_format_configs.config
+  local_action: copy src={{ confdir }}/log_format_configs.config dest={{ tempdir }}/filled/nginx/conf.d/log_format_configs.config
 
 - name: Create filled template tar
   local_action: shell tar -C {{ tempdir }}/filled/ -zvcf {{ tempdir }}/filled_templates.tgz .

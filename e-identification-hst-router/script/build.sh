@@ -57,7 +57,7 @@ while [ "$1" != "" ]; do
     shift
 done
 
-docker pull httpd:2.4
+docker pull httpd:2.4.37
 
 #build
 IMAGE_NAME=e-identification-docker-virtual.vrk-artifactory-01.eden.csc.fi/${PROJECTNAME}:${TARGET_ENV}

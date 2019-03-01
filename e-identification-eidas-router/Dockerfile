@@ -1,4 +1,4 @@
-FROM httpd:2.4.27
+FROM httpd:2.4.37
 
 RUN apt-get update && apt-get upgrade -y
 COPY conf/templates /data00/templates/store
