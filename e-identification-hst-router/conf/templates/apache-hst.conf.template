@@ -11,8 +11,8 @@ ServerTokens Minimal
   SSLCACertificateFile /etc/apache/ssl/{{ vrk_ca_cert }}
   SSLProxyCACertificateFile /etc/apache/ssl/{{ apro_ca_cert }}
   SSLProxyVerify require
-  SSLProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
-  SSLProxyProtocol -all +TLSv1 +TLSv1.1 +TLSv1.2
+  SSLProtocol +TLSv1.2
+  SSLProxyProtocol +TLSv1.2
   SSLCipherSuite {{ apache_ciphers }}
   SSLProxyCipherSuite {{ apache_ciphers }}
   SSLHonorCipherOrder on
@@ -28,6 +28,7 @@ ServerTokens Minimal
   Header set X-Frame-Options: deny
   Header set Cache-Control "no-store"
   Header set Pragma "no-cache"
+  Header set Content-Security-Policy "{{ content_security_policy }}" 
 
   ErrorDocument 400 https://{{ ext_router_host }}/404
   ErrorDocument 401 https://{{ ext_router_host }}/404
@@ -71,6 +72,7 @@ ServerTokens Minimal
      SSLVerifyDepth 3
      RequestHeader set SSL_CLIENT_VERIFY "%{SSL_CLIENT_VERIFY}s"
      RequestHeader set SSL_CLIENT_CERT "%{SSL_CLIENT_CERT}s"
+     Header set Content-Security-Policy "{{ content_security_policy }}"
   </Location>
 
   Alias /certcheck /certcheck
@@ -82,6 +84,7 @@ ServerTokens Minimal
      Require all granted
      SSLVerifyClient require
      SSLVerifyDepth 3
+     Header set Content-Security-Policy "{{ content_security_policy }}"
   </Location>
 
   RedirectMatch ^/$ https://{{ ext_router_host }}/sivut/info/tietoapalvelusta/

@@ -1,0 +1,108 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="_b0240deb412e75df19dec0df064f917a2eeb4ec9" entityID="https://qa.oidctest.tunnistus.fi/sp1">
+
+  <md:Extensions xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport">
+    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha512"/>
+    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#sha384"/>
+    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+    <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#sha224"/>
+    <alg:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha224"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha384"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2009/xmldsig11#dsa-sha256"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+    <alg:SigningMethod Algorithm="http://www.w3.org/2000/09/xmldsig#dsa-sha1"/>
+  </md:Extensions>
+
+  <md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <md:Extensions>
+      <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://qa.oidctest.tunnistus.fi/Shibboleth.sso/LoginHAKAPankki/fi"/>
+    </md:Extensions>
+    <md:KeyDescriptor use="signing">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:KeyName>qa.oidctest.tunnistus.fi</ds:KeyName>
+        <ds:X509Data>
+          <ds:X509SubjectName>CN=qa.oidctest.tunnistus.fi,OU=Aprokete,O=Aprokete,L=Helsinki,ST=Uusimaa,C=FI</ds:X509SubjectName>
+          <ds:X509Certificate>MIIE1zCCAz+gAwIBAgIUVq4SmPFqfDprBzjmHhP+VN9AnyMwDQYJKoZIhvcNAQEL
+BQAwezELMAkGA1UEBhMCRkkxEDAOBgNVBAgMB1V1c2ltYWExETAPBgNVBAcMCEhl
+bHNpbmtpMREwDwYDVQQKDAhBcHJva2V0ZTERMA8GA1UECwwIQXByb2tldGUxITAf
+BgNVBAMMGHFhLm9pZGN0ZXN0LnR1bm5pc3R1cy5maTAeFw0xOTA4MTQwNTU4NTla
+Fw0yNDA3MTgwNTU4NTlaMHsxCzAJBgNVBAYTAkZJMRAwDgYDVQQIDAdVdXNpbWFh
+MREwDwYDVQQHDAhIZWxzaW5raTERMA8GA1UECgwIQXByb2tldGUxETAPBgNVBAsM
+CEFwcm9rZXRlMSEwHwYDVQQDDBhxYS5vaWRjdGVzdC50dW5uaXN0dXMuZmkwggGi
+MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDNqsrDfM6Crs27rACOWxzvnbio
+M1b58hOE3l8KpxYbmaHe+xrJLBUB8S7/vaebUTY86BaiOwoi79c91MeffCCxBp1F
+duR/S0rfyh9Ff9oJam5EyN1wTjIzN9ul1IZFQASbWrsXePsjbZdJ5xoJFZJ9/fps
+Egk4/RHBM5FhXsyWuWhpwHVceAti/ZrnlTCzjmrF1+3Yn6xcw9p2od4sEVY5AOcZ
+YPyNjcDs5vWs5LkKbbU7eShiBZ8i/OJkXPEBILyrMr3YKPsNxGvMjF+E59qKGPXS
+bZpqpSiDpsTK/Vshj02mbkzPlsHKmVVj5uNTBHiW1Qv6mFhgG5X1hy7tvpCutG0U
+nIybqBSkd/Ys9gTLcdNhKQ5QtWsYY7ZIGCtBAZlEY+2H/nd4S1eLRcrMvZ0SlWWc
+DslbYU7PgDz1KjbWackUJpM7CuYJJAIG9M6ojWHdeEC6qbzxvICNf3uElw9N59Ah
+vFHW6aWDhGaZFvkfdtMTFsv2FRfpvgCozhWT16MCAwEAAaNTMFEwHQYDVR0OBBYE
+FGp94URb9IoV5nuJ4GAnCuS0nRGuMB8GA1UdIwQYMBaAFGp94URb9IoV5nuJ4GAn
+CuS0nRGuMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggGBAFnRaOcx
++b799S/l64e4GXtPob8CVDwOJKBN7Phrjop6vuqV+3d2UcZnWWMjdVmPGnCQIzw2
+gwtl+gh6zzJ6mOnL44f3XqcMDzm5YEw+fUWaA6Ow5lWryz9yF2EKJEoHfUq9NelE
+YkdGqKtq5r/pmBzCskBCXjDMTB7Dxdqgt4MdQNgnD0WBDVeNaNv2Z6WDm0Fho/Bs
+njlz5XlvxKYDQ2UmfHl1uK0eLjyDLwF/dOK/uc2BA4yeHjrcWASE90O2zf4b80rH
+Cjjr32ovydJC7ulJMVYQdJq55qjELhi+0B6pDCRER0plQoZbBeF5w/ZT2lqlvOpK
+d9W4pn2iPFHNpMIWwp/nKJAT05wzrnah1amtfCEZqKYl8281tAHkVs1NDX6MimKw
+9l9yo5nsTg7FoJrSVJdhgtSavRPOy4a+39LR5LxIP7srZx9KuFLYEc7qotrn1ezG
+/HNqnz0PtRyXfNr8cUEZRHOeO5Vj5KNUu5rdj43oE7bn1RFqIsxm+u1tzQ==
+</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+    </md:KeyDescriptor>
+    <md:KeyDescriptor use="encryption">
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:KeyName>qa.oidctest.tunnistus.fi</ds:KeyName>
+        <ds:X509Data>
+          <ds:X509SubjectName>CN=qa.oidctest.tunnistus.fi,OU=Aprokete,O=Aprokete,L=Helsinki,ST=Uusimaa,C=FI</ds:X509SubjectName>
+          <ds:X509Certificate>MIIE1zCCAz+gAwIBAgIUD1vXKzzYE0dzOGfWQMx7bmtXUPwwDQYJKoZIhvcNAQEL
+BQAwezELMAkGA1UEBhMCRkkxEDAOBgNVBAgMB1V1c2ltYWExETAPBgNVBAcMCEhl
+bHNpbmtpMREwDwYDVQQKDAhBcHJva2V0ZTERMA8GA1UECwwIQXByb2tldGUxITAf
+BgNVBAMMGHFhLm9pZGN0ZXN0LnR1bm5pc3R1cy5maTAeFw0xOTA4MTQwNjIyMjRa
+Fw0yNDA3MTgwNjIyMjRaMHsxCzAJBgNVBAYTAkZJMRAwDgYDVQQIDAdVdXNpbWFh
+MREwDwYDVQQHDAhIZWxzaW5raTERMA8GA1UECgwIQXByb2tldGUxETAPBgNVBAsM
+CEFwcm9rZXRlMSEwHwYDVQQDDBhxYS5vaWRjdGVzdC50dW5uaXN0dXMuZmkwggGi
+MA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDBG8Fuc7G+9YGPorKA+PIYDtST
+L8YSxi1UNHJmpoDsPxSYXzz3zlHbNT2+g9GbuDxk2Rf3rUpVXoUsFv7J8pKVEj75
+9oI6NMsS2WxNaOrq+Tno7Lk0apc4lXkcHQ9I4gHaj/Qld6hejcUPN4zkTYLcYJrY
+zlzqEPrl0yTeBAz/nKT2cVXVj/RgwLjmWVfPcFcre6foo+hAyi4fYHTSpiJP8IIa
+ItAle0G06UXaBcRn2cFWuTSxy7RoPiDNRskuhTiyvhDd8pfwmRySOgk+hCzMl9sS
+AlMKLxwbr5PzmcPMViM4OqAsDhA6dEp99kt8T7kNh6T44PQFzJGwqOuq6NBae3vH
+91+2+ul/UauCe66qazatr89SJx1DuBlNPclAlKkcZUsExiTx3j5vF0o4TziqgAPl
+cBcPg/UuIyuIl8zPR1XQKda1nBq3sL9+G9Vlw7TGhv15H8DnIe+sKrTfmVjkpRv0
+cPoGGHenaVwpvwR1RVLlyLAZytPkXbqylhprSbkCAwEAAaNTMFEwHQYDVR0OBBYE
+FGrrTy0sbSoEfqFDhz7BaoBEGcWFMB8GA1UdIwQYMBaAFGrrTy0sbSoEfqFDhz7B
+aoBEGcWFMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggGBAJ44FfcP
+dcj3BAX/w9rnieV68SDlq+Y3WlvS9QJiwxPodgtlONjIi+uLaBXPrREnBGE8E9rP
+9XoEMmWXBXxXz58sYdxR89o5jWQM4wspUvhBGqp+5MiGcuweWDqfUo6BcuvVCECK
+wHEuj5Loct1skoZbXGuGsyQEYW5UYPjx0EfhQR8R26bxcHuVSzRl3YwJ8433mBXo
+Oap86guGVLQM7DmNwqbYGRguR7YQIAYH4DGmg4lqseuXonCE4A+CL5t56pwfhh5v
+K4pBKQdA1CqtxtMP7FgCGIRkbYMIijDqwxaKDdWYMxK7tAmrnqKGjRs7Ti8oJ0MW
+bQ0Y7Qm3pWp0XKJzm+MrCR8BBZnzpYdQ0NkTirrI1c8iRiCX6mkvc30mSNrBLaJj
+zbz40QFhffhnrordQwWDIkRtJx62nEDuOIjGQjnsIsXITJ5KSS/PF3ZjzzRKa2mK
+rqw3XGCO4yRNGhSeUd+x4DqY+TjUdWxnmGazKzNvibdGw11W1Hiekg2Abg==
+</ds:X509Certificate>
+        </ds:X509Data>
+      </ds:KeyInfo>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes128-gcm"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes192-gcm"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#aes256-gcm"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes192-cbc"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
+      <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
+    </md:KeyDescriptor>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://qa.oidctest.tunnistus.fi/Shibboleth.sso/SAML2/POST" index="1"/>
+  </md:SPSSODescriptor>
+
+</md:EntityDescriptor>

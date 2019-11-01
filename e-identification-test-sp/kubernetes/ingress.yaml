@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: e-identification-test-sp
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-path: /Shibboleth.sso/Session
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '60'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-Ext-2018-06
+spec:
+  rules:
+    - host: oidc-test-sp.apro.tunnistus.fi
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: e-identification-test-sp
+              servicePort: 443
+          - path: /Shibboleth.sso/*
+            backend:
+              serviceName: e-identification-test-sp
+              servicePort: 443

@@ -1,0 +1,402 @@
+<SPConfig xmlns="urn:mace:shibboleth:3.0:native:sp:config"
+    xmlns:conf="urn:mace:shibboleth:3.0:native:sp:config"
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+    clockSkew="180">
+
+    <OutOfProcess tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%UA|%a" />
+
+    <!-- The ApplicationDefaults element is where most of Shibboleth's SAML bits are defined. -->
+    <ApplicationDefaults entityID="https://qa.oidctest.tunnistus.fi/sp1"
+        REMOTE_USER="eppn subject-id pairwise-id persistent-id"
+        cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
+
+        <!--
+        Controls session lifetimes, address checks, cookie handling, and the protocol handlers.
+        Each Application has an effectively unique handlerURL, which defaults to "/Shibboleth.sso"
+        and should be a relative path, with the SP computing the full value based on the virtual
+        host. Using handlerSSL="true" will force the protocol to be https. You should also set
+        cookieProps to "https" for SSL-only sites. Note that while we default checkAddress to
+        "false", this makes an assertion stolen in transit easier for attackers to misuse.
+        -->
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+                  checkAddress="false" consistentAddress="false" handlerSSL="false" cookieProps="http">
+
+            <SessionInitiator type="SAML2" id="LoginAktiaFiOIDC" Location="/LoginAktiaOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aktia_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.aktia.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginAktiaTestFiOIDC" Location="/LoginAktiaTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="aktia_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.aktia.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginAlandsbankenFiOIDC" Location="/LoginAlandsbankedOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="alandsbanken_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.alandsbanken.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+
+            <SessionInitiator type="SAML2" id="LoginAlandsbankenTestFiOIDC" Location="/LoginAlandsbankedTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="alandsbanken_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.alandsbanken.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginDanskeFiOIDC" Location="/LoginDanskeOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="danske_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.danskebank.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginDanskeTestFiOIDC" Location="/LoginDanskeTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="danske_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.danskebank.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginHandelsFiOIDC" Location="/LoginHandelsOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="handelsbanken_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.handelsbanken.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginHandelsTestFiOIDC" Location="/LoginHandelsTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="handelsbanken_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.handelsbanken.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+
+            <SessionInitiator type="SAML2" id="LoginNordeaFiOIDC" Location="/LoginNordeaOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="nordea_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.nordea.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginNordeaTestFiOIDC" Location="/LoginNordeaTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="nordea_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.nordea.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginNordeaTestSvOIDC" Location="/LoginNordeaTestOIDC/sv"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="nordea_test_sv_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>sv-FI</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.nordea.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginNordeaTestEnOIDC" Location="/LoginNordeaTestOIDC/en"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="nordea_test_en_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>en</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.nordea.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginOmaspFiOIDC" Location="/LoginOmaspOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="omasp_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.omasp.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginOmaspTestFiOIDC" Location="/LoginOmaspTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="omasp_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.omasp.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginPopFiOIDC" Location="/LoginPopOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="pop_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.pop.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginPopTestFiOIDC" Location="/LoginPopTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="pop_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.pop.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginSaastopankkiFiOIDC" Location="/LoginSaastopankkiOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="saastopankki_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.sp.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginSaastopankkiTestFiOIDC" Location="/LoginSaastopankkiTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="saastopankki_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.sp.floatest2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginSPankkiFiOIDC" Location="/LoginSPankkiOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="spankki_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.s-pankki.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <SessionInitiator type="SAML2" id="LoginSPankkiTestFiOIDC" Location="/LoginSPankkiTestOIDC/fi"
+                              entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1"
+                              target="/Shibboleth.sso/Session">
+                <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="spankki_test_fi_oidc"
+                                    Version="2.0" IssueInstant="2012-01-01T00:00:00Z">
+                    <samlp:Extensions>
+                        <kapa xmlns="urn:kapa:SAML:2.0:extensions">
+                            <lang>fi</lang>
+                        </kapa>
+                    </samlp:Extensions>
+                    <samlp:RequestedAuthnContext Comparison="exact" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+                        <saml:AuthnContextClassRef>https://tunnistus.fi/oidc.s-pankki.floa2</saml:AuthnContextClassRef>
+                    </samlp:RequestedAuthnContext>
+                </samlp:AuthnRequest>
+            </SessionInitiator>
+            
+            <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="/SAML2/POST" index="1"/>
+            
+            <!-- Administrative logout. -->
+            <LogoutInitiator type="Admin" Location="/Logout/Admin" acl="127.0.0.1 ::1" />
+			<LogoutInitiator type="Chaining" Location="/Logout">
+				<LogoutInitiator type="SAML2"
+					outgoingBindings="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+					signing="true" />
+				<LogoutInitiator type="Local" signing="true" />
+			</LogoutInitiator>          
+            <!-- Extension service that generates "approximate" metadata based on SP configuration. -->
+            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+
+            <!-- Status reporting service. -->
+            <Handler type="Status" Location="/Status" />
+
+            <!-- Session diagnostic service. -->
+            <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+
+            <!-- JSON feed of discovery information. -->
+            <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+            
+        </Sessions>
+
+
+        <!--
+        Allows overriding of error template information/filenames. You can
+        also add your own attributes with values that can be plugged into the
+        templates, e.g., helpLocation below.
+        -->
+        <Errors supportContact="root@localhost"
+            helpLocation="/about.html"
+            styleSheet="/shibboleth-sp/main.css"/>
+
+		<MetadataProvider type="XML" path="qa.oidc.tunnistus.fi.xml"/>
+		<MetadataProvider type="XML" path="prod.oidc.tunnistus.fi.xml"/>
+
+        <!-- Map to extract attributes from SAML assertions. -->
+        <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
+
+        <!-- Default filtering policy for recognized attributes, lets other data pass. -->
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+
+        <!-- Simple file-based resolvers for separate signing/encryption keys. -->
+        <CredentialResolver type="File" use="signing"
+            key="/data00/secrets/sp-signing-key.pem" certificate="/data00/secrets/sp-signing-cert.pem"/>
+        <CredentialResolver type="File" use="encryption"
+            key="/data00/secrets/sp-encrypt-key.pem" certificate="/data00/secrets/sp-encrypt-cert.pem"/>
+        
+    </ApplicationDefaults>
+    
+    <!-- Policies that determine how to process and authenticate runtime messages. -->
+    <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+
+    <!-- Low-level configuration about protocols and bindings available for use. -->
+    <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+
+</SPConfig>

@@ -1,0 +1,94 @@
+<EntityDescriptor
+	xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+	xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+	entityID="https://oidc-adapter.tunnistaminen.suomi.fi/oidc-adapter/idp1">
+	<IDPSSODescriptor WantAuthnRequestsSigned="true"
+		protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+		<Extensions>
+			<mdui:UIInfo>
+				<mdui:DisplayName xml:lang="fi">Kapa prod OIDC IdP fi
+				</mdui:DisplayName>
+				<mdui:DisplayName xml:lang="en">Kapa prod OIDC IdP en
+				</mdui:DisplayName>
+				<mdui:DisplayName xml:lang="sv">Kapa prod OIDC IdP sv
+				</mdui:DisplayName>
+				<mdui:Description xml:lang="fi">Kapa prod OIDC IdP desc fi
+				</mdui:Description>
+				<mdui:Description xml:lang="en">Kapa prod OIDC IdP desc en
+				</mdui:Description>
+				<mdui:Description xml:lang="sv">Kapa prod OIDC IdP desc sv
+				</mdui:Description>
+			</mdui:UIInfo>
+		</Extensions>
+		<KeyDescriptor use="signing">
+			<ds:KeyInfo>
+				<ds:X509Data>
+					<ds:X509Certificate>
+MIIE2zCCAsMCCQCu9yiQ7XtFdDANBgkqhkiG9w0BAQsFADByMQswCQYDVQQGEwJG
+STEQMA4GA1UECAwHVXVzaW1hYTERMA8GA1UEBwwISGVsc2lua2kxHjAcBgNVBAoM
+FVZhZXN0b3Jla2lzdGVyaWtlc2t1czENMAsGA1UECwwEUFJPRDEPMA0GA1UEAwwG
+S2FQQUNBMB4XDTE5MDgxNTEzMzgwMloXDTI0MDcxOTEzMzgwMlowbTELMAkGA1UE
+BhMCRkkxEDAOBgNVBAgMB1VVU0lNQUExETAPBgNVBAcMCEhlbHNpbmtpMR4wHAYD
+VQQKDBVWYWVzdG9yZWtpc3RlcmlrZXNrdXMxGTAXBgNVBAMMEE9JREMgSURQIFNp
+Z25pbmcwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQC2XiJwn8qbw5Su
+lsoq/EBpnN06WhZNMQOdl/vKr1WlHDCFsoD++HeCnstgPkXJMjlnBqv2kgbyL+wt
+OKS2LZ245aUg063vophBBqBq/hCiCFgh5KU2bWFD6p+Qdn5DgbxgQceEEiS2R3Dc
+2mYdL/s6GAkF3SNlrGwfSJVpcl2bEJ06G/uOZL7ZXQnTknN7rBS6xdOyDQTEM9ty
+2Tx13KBSNoyEvN4IZdKl8uLYwIo7N1mOG42cJHlIPX7lvMlI1hS+50kEs0V3duQx
+lp8n/Qocn6D130rdLJ2L+KIQ8/M7wxedgWrZeDl5Up/MKz/0EQR9tT0m/rJf1dgT
+FBsqnTNc7m810ZDAWuVmSPSdG6OoGnvQ+OmntsJXhXqx5WqUP97tsKidNqqN6Jrx
+LVbH0N8gsCLkxvfviExt86y3vYBGYGnoeK7nxuby4eaRaTfZnoIduhMNoQOInrvM
+fFsUUcpxF8EdPE4e47x+II9LaddoQynXBoAvnIfkJjK8v7QeBScCAwEAATANBgkq
+hkiG9w0BAQsFAAOCAgEAT2tFg0hKO+AT5qTuyY7/3D3tSpmrrfmlswYTI8okLxPa
+b63JJBhmX4nJjJz9bAdP9bOjGIu/1rUbVwfLY2C8cvftN2TWE6mxBoLBJkSVeA/J
+0de107WF7wDP9Wt2Q7h6abZZLdsjiaDV8+St+MR4iHq4tqmwYCuPOE9QSXH/SZWZ
+Af74KDG1j/gr02z1T/Rb42kfygY3Ex3wJquRAtFy9pF3x6Mu6SqzOqgHB5+9dGon
+9pbEYVwi+hkOEoKbeU1nvmK1rusaJBa0JwrliCauAX7PsqMp5Xxp0Hc1+FDzenXU
+zAdpd7hAYwISiJd3xVnrF8N6DE4bhXytnfKFDs67P4R1hPUOVd6CUSamBXNW+iTS
+UvDmA5u4P3dVvTfVvvpib41H98GaZjnCFV6/GHTPRbTUv5C1UFDyL5uoUfbOagRF
+1mUrNhDRsUjiYq6bGG4eX17fmsbZvRCU4O56z/BI8h8qVbCmCC51VCGeJ7G5WkZF
+K/K6gDcNCy7Ojz+KwHzo+hM+mzmwywnfRCghFPui11gjNBd0/mihMytze4ltrjr/
+3lR4F1d0DSjvXXVpOnEEFEmW0c+AXJxA42kgxXSuuDSIKpMWVmunchUi/n+kn9s9
+P9eXw7xgBH8AlKGM74IZbVuS/h/F3XijuL4k5XFLOb0JecF3BqL50RY/ZZi1wDs=
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</KeyDescriptor>
+		<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+		</NameIDFormat>
+		<SingleSignOnService
+			Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+			Location="https://oidc-adapter.tunnistaminen.suomi.fi/oidcidp/profile/SAML2/POST/SSO" />
+		<SingleSignOnService
+			Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+			Location="https://oidc-adapter.tunnistaminen.suomi.fi/oidcidp/profile/SAML2/Redirect/SSO" />
+	</IDPSSODescriptor>
+	<Organization>
+		<OrganizationName xml:lang="fi">Kapa fi
+		</OrganizationName>
+		<OrganizationName xml:lang="en">Kapa en
+		</OrganizationName>
+		<OrganizationName xml:lang="sv">Kapa sv
+		</OrganizationName>
+		<OrganizationDisplayName xml:lang="fi">Kapa
+			displ fi</OrganizationDisplayName>
+		<OrganizationDisplayName xml:lang="en">Kapa
+			displ en</OrganizationDisplayName>
+		<OrganizationDisplayName xml:lang="sv">Kapa
+			displ sv</OrganizationDisplayName>
+		<OrganizationURL xml:lang="fi">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+		<OrganizationURL xml:lang="en">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+		<OrganizationURL xml:lang="sv">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+	</Organization>
+	<ContactPerson contactType="technical">
+		<GivenName>Kapa development</GivenName>
+		<SurName>Kapa development</SurName>
+		<EmailAddress>mailto:admin@vagrant.dev</EmailAddress>
+	</ContactPerson>
+</EntityDescriptor>

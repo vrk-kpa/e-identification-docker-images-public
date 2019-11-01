@@ -24,7 +24,7 @@ server {
     proxy_ssl_trusted_certificate /etc/nginx/ssl/{{ apro_ca_cert }};
     proxy_ssl_verify on;
     ssl_dhparam /etc/nginx/ssl/dhparam.pem;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1.2;
     ssl_ciphers '{{ nginx_ciphers }}';
     proxy_ssl_ciphers '{{ nginx_ciphers }}';
     ssl_prefer_server_ciphers on;
@@ -123,7 +123,10 @@ server {
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/500/;
         proxy_set_header Host $host;
     }
-    location /discovery-page {
+    location /sivut/discovery-page {
+        if ($cookie_E-Identification-LogTag != $arg_tag) {
+            return 302 https://{{ ext_router_host }}/sivut/bookmark/;
+        }
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/discovery-page/;
@@ -136,6 +139,21 @@ server {
     }
     location /sivut/cookie {
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/cookie/;
+        proxy_set_header Host $host;
+    }
+    location /sivut/bookmark {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/bookmark/;
+        proxy_set_header Host $host;
+    }
+    location /sivut/parameter {
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/parameter/;
+        proxy_set_header Host $host;
+    }
+    location /sivut/500 {
+        if ($args ~ "^m=noinitreqparam$") {
+            return 302 https://{{ ext_router_host }}/sivut/parameter/;
+        }
+        proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/500/;
         proxy_set_header Host $host;
     }
     location /disruption {
@@ -277,13 +295,6 @@ server {
         proxy_set_header Host $host;
         error_page 404 =404 @errtupas404;
         error_page 502 =502 @errtupas502;
-    }
-
-    # Redirects to Mobile Identity Provider
-    location /mobileidp/profile/SAML2 {
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ mobile_idp_host }}:{{ mobile_idp_port }}/mobileidp/profile/SAML2;
-        proxy_set_header Host $host;
     }
 
     # Redirects to feedback service

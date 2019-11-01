@@ -1,0 +1,124 @@
+<EntityDescriptor
+	xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+	xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+	entityID="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidc-adapter/idp1">
+	<IDPSSODescriptor WantAuthnRequestsSigned="true"
+		protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+		<Extensions>
+			<mdui:UIInfo>
+				<mdui:DisplayName xml:lang="fi">Kapa qa OIDC IdP fi
+				</mdui:DisplayName>
+				<mdui:DisplayName xml:lang="en">Kapa qa OIDC IdP en
+				</mdui:DisplayName>
+				<mdui:DisplayName xml:lang="sv">Kapa qa OIDC IdP sv
+				</mdui:DisplayName>
+				<mdui:Description xml:lang="fi">Kapa qa OIDC IdP desc fi
+				</mdui:Description>
+				<mdui:Description xml:lang="en">Kapa qa OIDC IdP desc en
+				</mdui:Description>
+				<mdui:Description xml:lang="sv">Kapa qa OIDC IdP desc sv
+				</mdui:Description>
+			</mdui:UIInfo>
+		</Extensions>
+		<KeyDescriptor use="signing">
+			<ds:KeyInfo>
+				<ds:X509Data>
+					<ds:X509Certificate>
+MIIE3TCCA0WgAwIBAgIUSfHzamfWLp0PAv30u6iZMO1XPkEwDQYJKoZIhvcNAQEL
+BQAwfjELMAkGA1UEBhMCRkkxEDAOBgNVBAgMB1V1c2ltYWExETAPBgNVBAcMCEhl
+bHNpbmtpMQswCQYDVQQKDAJRQTESMBAGA1UECwwJVHVubmlzdHVzMSkwJwYDVQQD
+DCBlLWlkZW50aWZpY2F0aW9uLW9pZGMtYWRhcHRlci1xYTAeFw0xOTA4MDYxMTIx
+MTNaFw0yNDA3MTAxMTIxMTNaMH4xCzAJBgNVBAYTAkZJMRAwDgYDVQQIDAdVdXNp
+bWFhMREwDwYDVQQHDAhIZWxzaW5raTELMAkGA1UECgwCUUExEjAQBgNVBAsMCVR1
+bm5pc3R1czEpMCcGA1UEAwwgZS1pZGVudGlmaWNhdGlvbi1vaWRjLWFkYXB0ZXIt
+cWEwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDoKx437pQJlV/SBR99
+mslQSDiQtsGQNyDe9fVUQ+Hc7IUXjOS0nPdPBZJemroXPEmpInlmmBM5jMX4+1IC
+Z4Is+ck/ChVOJRmPCwE9JOoxKQTfTyxWEGUwdHoCY2N2yr+PivLsicUb8T2/Om1G
+matL/TjZpn+rbzpwE3RuRyD+nbBXtRAqHxM97xvvyytNxTlADKYZHSCo3uLJ7LDa
+L0XvObDdVQ3r42xTsZ/Dz2UojhGZ8/lJOYHsMg5Y4d0jnmuUIKVcg0nINn8ggf+F
+8z+BNfogqMBO9fqJT9n3pbqh0iPUdZy4djE7Gy1kc83VJufub/AqZaw/oCRQdoPt
+uMTHLuGQEarDy9JhPOV13oFVign0d2HHgJebMmErbew7qpdVEFt/YJ3fYFpJzp5F
+NK4AQW0FojCnyyQCpU//tsabpWPwEyX6FGAAycZufNBxaAaBwkqWSvT8kpNwWETs
+wQMUhxtMcqNSxE2x7m2yHV0dKQs68eqDuMtz1+HXNJNOW4MCAwEAAaNTMFEwHQYD
+VR0OBBYEFISpAU6UzlAiC/z3KwEVsjkHqe+jMB8GA1UdIwQYMBaAFISpAU6UzlAi
+C/z3KwEVsjkHqe+jMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggGB
+AL110UXNjtyoa6E/jhavJFE3SqR+2CX9i9Tf45UdxfujhzKPSGc0zNWkba2VmmmJ
+5qpp3Umwv8hiJAvIK8foGU1kBrYFBqGfJdQGySOQ7dqBwUsimUkEleCEIcqPMeC5
+ZfxIC1B6qwed4/fpOm8JlxaTI1I/Zg/P0Km/gdn+lIxixesdYohXVGBPQ3zRD11P
+aOQXQoA4jo4Qvj6m5ttPFAqsShvTPo1g3ArLUq7pZdMdaPLn0u1yd5KzflD1oFxH
+Rjo6EjGHUzbhHFWEPE0JNqNUz/6xLZox9TPV6K6wzOsGflU+3H6ZTaYdkz4+fNte
+Od24BXMoAQpa4XaOhQXEOJKOZ374g4TKuHZ9/eVaWyx0ueaZRjttVUHMssq3HzSS
+Mt6xS/+x0+xC7IW9M6fWDWqSyi1bwm8kqIQWNSPPD/jh1LCLIIsu3KVjTt4wBe/H
+nrrilQ+TG22Dd7mFDJ6tX5ksAfMtOC/b5qW4uAw7UsFsFnAa+Q3Mkw5VV9UcDJlK
+zA==
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</KeyDescriptor>
+		<KeyDescriptor use="signing">
+			<ds:KeyInfo>
+				<ds:X509Data>
+					<ds:X509Certificate>
+MIIEhDCCAuwCCQD0SRt1OnbgsTANBgkqhkiG9w0BAQsFADB/MQswCQYDVQQGEwJGSTEQMA4GA1UE
+CAwHVVVTSU1BQTERMA8GA1UEBwwISGVsc2lua2kxHjAcBgNVBAoMFVZhZXN0b3Jla2lzdGVyaWtl
+c2t1czEZMBcGA1UECwwQVGVzdCBDZXJ0aWZpY2F0ZTEQMA4GA1UEAwwHVGVzdCBDQTAeFw0xOTA4
+MTQxMjQ0MTVaFw0yNDA3MTgxMjQ0MTVaMIGIMQswCQYDVQQGEwJGSTEQMA4GA1UECAwHVVVTSU1B
+QTERMA8GA1UEBwwISGVsc2lua2kxHjAcBgNVBAoMFVZhZXN0b3Jla2lzdGVyaWtlc2t1czEZMBcG
+A1UECwwQVGVzdCBDZXJ0aWZpY2F0ZTEZMBcGA1UEAwwQT0lEQyBJRFAgU2lnbmluZzCCAaIwDQYJ
+KoZIhvcNAQEBBQADggGPADCCAYoCggGBAJ7cOKZUOflmGnM178nFZIR9t708620L0MsmaHrm+uU5
+cdcTInbrxk7AbaooKUlDBWZ4eHu1XO1SUeYR1iG6VGu7k1Kz5UODb7se1bQ8fAd2zHoIx04DSHX3
+KclrvVgcwtlsl5X9oHst8VoWp142lLqwMpEx80BRpXwd2WdNMoCX/v7JhlaDFecAXgF1UyGy4uXz
+KuFrguGDcF7xpegrOx1PwGr5txqrOrFoTMoyYFI3t3A62ee/AQkSyTF/zhjX8MTcgUnKsYq19Ng6
+qPpydyWHgKL74dELH3V5h3jRFWtaU1DvFDI2TbpP/KoA1TaCawyq4s0ORBj0OdAbQnut/ifdrmia
+5RG28+rwAd4Iot1Mpdb9rHeVO0xyDVGiE5xg57dmzJtoJA+zlPcv4yFXjCq85McsneJDJTCSO3RO
+i1iB0CjiDGxgssAaHIQYdullkBoYM1VWqxLe/4JLrsbEpWGGTk6DmiFl6iwn2Afb9co7zujANnvX
+wF2hy50pV3zlvwIDAQABMA0GCSqGSIb3DQEBCwUAA4IBgQAneq48/Gw4A6s7F+x6KiYqp7Klcatd
+dIUlCKSxesaHXWBFZIyyBEpiLCt28W3bcbM73vnaIfjpU+FJ1VFXP/P3D5plAzlWCrNf/jhWcnKH
+G//IADTIWQGTncWySv1JI6orzimM8XZ+L4P+0zOxNPGz3aB4CFkG8hK6qD1IMEffKqrbtpdCFG3y
+E0RLWQKwTv+bSJTJgy8uk8PrHwmcl+kZ0tt+/bShg+bv1dHx2PlN/fxvx1dBMWc9G/lEOZ3IHhY5
+h8qJZJmLArcDXNLW2jk1j1sG6MRTayQAXeTS8GwdL/X5DpZDNvN2hXbY6Tf+Aneq1An9EsvAqDA+
+fLcyaXWNXIu/jZL5ezMn8RbMr/6ZU3YxpBb+LhPc3whnTZ71SqpKh71K0HuOUoTiOgraWgpdbD/w
+hdl0ZOLbOXYlIIFJa5swZwyZLSqlj8WtWlm7bU6+n5/amjl7fQRRH7qS2vxYmlPY0alc8g+CJobk
+oPQRhvQmXJ7vW3y5qpJMSlmsqLQ=
+					</ds:X509Certificate>
+				</ds:X509Data>
+			</ds:KeyInfo>
+		</KeyDescriptor>
+		<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+		</NameIDFormat>
+		<SingleSignOnService
+			Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+			Location="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidcidp/profile/SAML2/POST/SSO" />
+		<SingleSignOnService
+			Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+			Location="https://oidc-adapter.tunnistaminen.qa.suomi.fi/oidcidp/profile/SAML2/Redirect/SSO" />
+	</IDPSSODescriptor>
+	<Organization>
+		<OrganizationName xml:lang="fi">Kapa development fi
+		</OrganizationName>
+		<OrganizationName xml:lang="en">Kapa development en
+		</OrganizationName>
+		<OrganizationName xml:lang="sv">Kapa development sv
+		</OrganizationName>
+		<OrganizationDisplayName xml:lang="fi">Kapa
+			development displ fi</OrganizationDisplayName>
+		<OrganizationDisplayName xml:lang="en">Kapa
+			development displ en</OrganizationDisplayName>
+		<OrganizationDisplayName xml:lang="sv">Kapa
+			development displ sv</OrganizationDisplayName>
+		<OrganizationURL xml:lang="fi">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+		<OrganizationURL xml:lang="en">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+		<OrganizationURL xml:lang="sv">http://vm.fi/palveluarkkitehtuuri
+		</OrganizationURL>
+	</Organization>
+	<ContactPerson contactType="technical">
+		<GivenName>Kapa development</GivenName>
+		<SurName>Kapa development</SurName>
+		<EmailAddress>mailto:admin@vagrant.dev</EmailAddress>
+	</ContactPerson>
+</EntityDescriptor>

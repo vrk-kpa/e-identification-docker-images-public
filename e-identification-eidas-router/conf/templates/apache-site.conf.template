@@ -7,7 +7,7 @@ ServerTokens Minimal
   SSLEngine On
   SSLCertificateFile    /etc/apache/ssl/{{ eidas_router_pub_ssl_cert }}
   SSLCertificateKeyFile /etc/apache/ssl/{{ eidas_router_pub_ssl_key }}
-  SSLProtocol -all +TLSv1.2
+  SSLProtocol +TLSv1.2
   SSLCipherSuite {{ apache_ciphers }}
   SSLHonorCipherOrder on
   SSLCompression Off
