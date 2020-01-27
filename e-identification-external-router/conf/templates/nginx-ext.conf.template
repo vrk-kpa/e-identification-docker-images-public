@@ -129,6 +129,7 @@ server {
         }
         add_header Content-Security-Policy "{{ content_security_policy }}" always;
         add_header Cache-Control "no-store";
+        add_header Referrer-Policy "origin";
         proxy_pass https://{{ static_host }}:{{ static_port }}/sivut/discovery-page/;
         proxy_set_header Host $host;
     }
