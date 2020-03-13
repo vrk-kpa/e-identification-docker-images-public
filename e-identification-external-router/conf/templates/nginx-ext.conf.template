@@ -273,11 +273,7 @@ server {
         add_header Cache-Control "no-store";
         proxy_pass https://{{ sp_host }}:{{ sp_port }}/sp-error;
     }
-    location /Shibboleth.sso {
-        add_header Content-Security-Policy "{{ content_security_policy }}" always;
-        add_header Cache-Control "no-store";
-        proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
-    }
+{% include nginx_shibboleth_sso_location_template %}
     location /Shibboleth.sso/Logout {
     }
 

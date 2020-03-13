@@ -1,0 +1,14 @@
+    location /Shibboleth.sso {
+        if ( $http_user_agent ~* "{{ user_agents_regex_for_samesite_behavior }}") {
+            rewrite ^(.*)$ /SameSiteDefault$1 last;
+        }
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
+        add_header Cache-Control "no-store";
+        proxy_cookie_path ~^(.*) "$1; SameSite=None";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
+    }
+    location /SameSiteDefault/Shibboleth.sso {
+        add_header Content-Security-Policy "{{ content_security_policy }}" always;
+        add_header Cache-Control "no-store";
+        proxy_pass https://{{ sp_host }}:{{ sp_port }}/Shibboleth.sso;
+    }
