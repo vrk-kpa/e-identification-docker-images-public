@@ -15,6 +15,11 @@ proxy_cache_key $scheme$request_method$host$request_uri;
 
 include conf.d/log_format_configs.config;
 
+map $http_user_agent $samesite_for_sso {
+    default                "";
+    "~{{ user_agents_regex_for_samesite_none_on_sso }}" "; SameSite=None";
+  }
+
 server {
     server_name {{ ext_router_host }};
     listen 443;
@@ -194,6 +199,9 @@ server {
 
     # setting language cookie based on locale request parameter
     location /idp/profile/SAML2/Redirect/SSO {
+
+        proxy_cookie_path "~^(?<path>.*)" $path$samesite_for_sso;
+
         set $issamlrequest 0;
         if ($args ~ "^SAMLRequest=.*&locale=(fi|sv|en)$") {
             set $issamlrequest 1;
@@ -223,6 +231,8 @@ server {
     }
 
     location /idp/profile/SAML2/POST/SSO {
+
+        proxy_cookie_path "~^(?<path>.*)" $path$samesite_for_sso;
 
         set $cookiestatus "0";
         if ($args ~ "^execution=.*") {
